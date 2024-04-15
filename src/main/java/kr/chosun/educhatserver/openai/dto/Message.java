@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatGPTRequest {
+public class Message {
     private String role;
     private String content;
 }
