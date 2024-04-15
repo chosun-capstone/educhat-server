@@ -3,3 +3,4 @@
 
 ### OpenAI 연동
     1. OpenAI API Key 발급
+    2. gitignore
