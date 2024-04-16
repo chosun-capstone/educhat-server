@@ -17,4 +17,10 @@ class OpenAiConfigTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    void testOpenAiConfig() throws Exception {
+        mockMvc.perform(get("/api/chat"))
+                .andExpect(status().isOk());
+    }
 }
