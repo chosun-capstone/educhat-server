@@ -21,6 +21,7 @@ import org.springframework.data.annotation.CreatedDate;
 public class ChatRecord {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "seq")
     private Long id;
 
     @NotEmpty
