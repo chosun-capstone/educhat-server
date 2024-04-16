@@ -18,13 +18,6 @@ public class OpenAiConfig {
     @Bean
     public RestTemplate template() {
         RestTemplate restTemplate = new RestTemplate();
-//        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-//        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-//            public boolean hasError(ClientHttpResponse response) throws IOException {
-//                HttpStatus statusCode = (HttpStatus) response.getStatusCode();
-//                return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
-//            }
-//        });
 
         restTemplate.getInterceptors().add(((request, body, execution) -> {
             request.getHeaders().setBearerAuth(openAiKey);
