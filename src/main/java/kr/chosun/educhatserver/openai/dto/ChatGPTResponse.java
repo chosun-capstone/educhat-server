@@ -1,5 +1,6 @@
 package kr.chosun.educhatserver.openai.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
