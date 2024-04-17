@@ -9,30 +9,31 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ChatRecord")
 public class ChatRecord {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "seq")
     private Long id;
 
-    @NotEmpty
-    @Column(name = "userId")
-    private String userId;
+//    @NotEmpty
+//    @Column(name = "userId")
+//    private String userId;
 
     @Column(name = "userMessage")
     private String userMessage;
 
-    @Column(name = "promptMessage")
-    private String promptMessage;
+    @Column(name = "botMessage")
+    private String botMessage;
 
     @CreatedDate
     @Column(name = "localDateTime")

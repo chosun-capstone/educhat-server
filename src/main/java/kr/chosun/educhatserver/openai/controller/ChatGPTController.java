@@ -1,5 +1,6 @@
 package kr.chosun.educhatserver.openai.controller;
 
+import jakarta.validation.Valid;
 import java.util.Map;
 import kr.chosun.educhatserver.openai.dto.ChatGPTRequest;
 import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
@@ -28,13 +29,23 @@ public class ChatGPTController {
 //        return response.getChoices().get(0).getMessage().getContent();
 //    }
 
-    private ChatGPTService chatGPTService;
+    private final ChatGPTService chatGPTService;
 
-    @GetMapping("/chat")
-    public ResponseEntity chat(@RequestBody String prompt) {
-        String response = chatGPTService.getChatGPTResponse(prompt);
-        String content = response != null ? response : "응답을 생성할 수 없습니다.";
+    @PostMapping("/chat")
+    public ResponseEntity chat(@RequestBody @Valid String prompt) {
+        ChatGPTRequest request = chatGPTService.setChatGPTRequest(prompt);
+        ChatGPTResponse response = chatGPTService.getChatGPTResponse(request);
+        String content = null;
 
+        if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
+            content = response.getChoices().get(0).getMessage().getContent();
+        }
+
+        if(content == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(content);
+        }
+
+        chatGPTService.saveChatRecord(request, response);
         return ResponseEntity.ok(content);
     }
 }

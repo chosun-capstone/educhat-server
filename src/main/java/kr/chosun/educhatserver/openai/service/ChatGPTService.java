@@ -2,6 +2,8 @@ package kr.chosun.educhatserver.openai.service;
 
 import kr.chosun.educhatserver.openai.dto.ChatGPTRequest;
 import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
+import kr.chosun.educhatserver.openai.entity.ChatRecord;
+import kr.chosun.educhatserver.openai.repository.ChatRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,24 @@ public class ChatGPTService {
     private String apiURL;
 
     private final RestTemplate template;
+    private final ChatRecordRepository repository;
 
-    public String getChatGPTResponse(String prompt) {
-        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+    public ChatGPTResponse getChatGPTResponse(ChatGPTRequest request) {
         ChatGPTResponse response = template.postForObject(apiURL, request, ChatGPTResponse.class);
-
-        if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
-            return response.getChoices().get(0).getMessage().getContent();
-        }
-
-        return null;
+        return response;
     }
 
-    public
+    public ChatGPTRequest setChatGPTRequest(String prompt) {
+        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+        return request;
+    }
+
+    public void saveChatRecord(ChatGPTRequest request, ChatGPTResponse response) {
+        ChatRecord chatRecord = ChatRecord.builder()
+                .userMessage(request.getMessages().get(0).getContent())
+                .botMessage(response.getChoices().get(0).getMessage().getContent())
+                .build();
+
+        repository.save(chatRecord);
+    }
 }
