@@ -2,7 +2,6 @@ package kr.chosun.educhatserver.openai.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,9 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
@@ -28,6 +24,9 @@ public class ChatRecord {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * login username
+     */
 //    @NotEmpty
 //    @Column(name = "userId")
 //    private String userId;

@@ -6,3 +6,4 @@
     2. gitignore 설정
     3. domain, controller, repository
     4. MySQL 설정
+    5. service
