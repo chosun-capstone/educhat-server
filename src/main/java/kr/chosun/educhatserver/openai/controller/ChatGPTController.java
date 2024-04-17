@@ -6,6 +6,7 @@ import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
 import kr.chosun.educhatserver.openai.service.ChatGPTService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,10 @@ public class ChatGPTController {
     private ChatGPTService chatGPTService;
 
     @GetMapping("/chat")
-    public String chat(@RequestBody String prompt) {
+    public ResponseEntity chat(@RequestBody String prompt) {
         String response = chatGPTService.getChatGPTResponse(prompt);
-        return response != null ? response : "응답을 생성할 수 없습니다.";
+        String content = response != null ? response : "응답을 생성할 수 없습니다.";
+
+        return ResponseEntity.ok(content);
     }
 }
