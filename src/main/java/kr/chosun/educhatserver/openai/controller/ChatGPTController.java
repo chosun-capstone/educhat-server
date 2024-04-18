@@ -29,7 +29,7 @@ public class ChatGPTController {
             content = response.getChoices().get(0).getMessage().getContent();
         }
 
-        if(content == null) {
+        if (content == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(content);
         }
 
