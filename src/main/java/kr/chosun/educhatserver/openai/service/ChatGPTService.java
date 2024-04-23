@@ -1,5 +1,8 @@
 package kr.chosun.educhatserver.openai.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import kr.chosun.educhatserver.openai.dto.ChatGPTRequest;
 import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
 import kr.chosun.educhatserver.openai.entity.ChatRecord;
@@ -21,6 +24,7 @@ public class ChatGPTService {
 
     private final RestTemplate template;
     private final ChatRecordRepository repository;
+    private final ObjectMapper objectMapper;
 
     public ChatGPTResponse getChatGPTResponse(ChatGPTRequest request) {
         ChatGPTResponse response = template.postForObject(apiURL, request, ChatGPTResponse.class);
@@ -32,9 +36,10 @@ public class ChatGPTService {
         return request;
     }
 
-    public void saveChatRecord(ChatGPTRequest request, ChatGPTResponse response) {
+    public void saveChatRecord(String prompt, ChatGPTResponse response) {
+
         ChatRecord chatRecord = ChatRecord.builder()
-                .userMessage(request.getMessages().get(0).getContent())
+                .userMessage(prompt)
                 .botMessage(response.getChoices().get(0).getMessage().getContent())
                 .build();
 
