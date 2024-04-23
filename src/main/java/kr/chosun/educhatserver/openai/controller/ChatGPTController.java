@@ -38,6 +38,7 @@ public class ChatGPTController {
         /**
          * file 뒤에 명령 커스텀 ("요약해줘", "문제 만들어줘" 같은 커맨드를 생성해서 적용 시킬 예정)
          */
+
         String input = objectMapper.readValue(prompt, Map.class).get("prompt").toString() + " 요약해줘";
         log.info("input: " + input);
 

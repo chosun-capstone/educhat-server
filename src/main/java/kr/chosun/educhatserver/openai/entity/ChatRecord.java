@@ -22,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "ChatRecord")
 public class ChatRecord {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
