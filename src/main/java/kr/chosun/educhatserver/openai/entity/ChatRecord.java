@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "ChatRecord")
 public class ChatRecord {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -34,7 +35,8 @@ public class ChatRecord {
     @Column(name = "userMessage")
     private String userMessage;
 
-    @Column(name = "botMessage")
+    @Lob
+    @Column(name = "botMessage", columnDefinition = "TEXT")
     private String botMessage;
 
     @CreationTimestamp

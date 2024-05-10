@@ -7,10 +7,12 @@ import kr.chosun.educhatserver.openai.repository.ChatRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChatGPTService {
 
     @Value("${openai.model}")
@@ -27,14 +29,16 @@ public class ChatGPTService {
         return response;
     }
 
+    @Transactional
     public ChatGPTRequest setChatGPTRequest(String prompt) {
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         return request;
     }
 
-    public void saveChatRecord(ChatGPTRequest request, ChatGPTResponse response) {
+    @Transactional
+    public void saveChatRecord(String prompt, ChatGPTResponse response) {
         ChatRecord chatRecord = ChatRecord.builder()
-                .userMessage(request.getMessages().get(0).getContent())
+                .userMessage(prompt)
                 .botMessage(response.getChoices().get(0).getMessage().getContent())
                 .build();
 
