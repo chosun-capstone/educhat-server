@@ -6,8 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import kr.chosun.educhatserver.security.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,12 +28,8 @@ public class ChatRecord {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * login username
-     */
-//    @NotEmpty
-//    @Column(name = "userId")
-//    private String userId;
+    @OneToOne(mappedBy = "categories")
+    private User user;
 
     @Column(name = "userMessage")
     private String userMessage;

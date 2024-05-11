@@ -6,8 +6,10 @@ import kr.chosun.educhatserver.security.constant.Role;
 import lombok.Data;
 
 import java.util.List;
+import lombok.Getter;
 
-@Data
+@Entity
+@Getter
 @Table(name = "USER")
 public class User {
 
@@ -28,6 +30,7 @@ public class User {
 	@Column(name = "ROLE", nullable = false)
 	private Role role;
 
-	@OneToMany(mappedBy = "USER", cascade = CascadeType.ALL)
-	private List<ChatRecord> categories;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "chat_record_id", referencedColumnName = "id")
+	private ChatRecord categories;
 }

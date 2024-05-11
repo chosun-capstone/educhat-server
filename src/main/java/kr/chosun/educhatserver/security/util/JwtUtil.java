@@ -4,8 +4,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import kr.chosun.educhatserver.security.dto.UserDto;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -25,7 +25,7 @@ public class JwtUtil {
 	) {
 
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-		this.key = Keys.hmacShaKeyFor(keyBytes);
+		this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 		this.accessTokenExpTime = accessTokenExpTime;
 	}
 
@@ -50,7 +50,7 @@ public class JwtUtil {
 				.setClaims(claims)
 				.setIssuedAt(Date.from(now.toInstant()))
 				.setExpiration(Date.from(tokenValidity.toInstant()))
-				.signWith(key, SignatureAlgorithm.HS256)
+				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
 	}
 

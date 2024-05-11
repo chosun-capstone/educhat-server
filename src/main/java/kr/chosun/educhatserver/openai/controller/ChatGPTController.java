@@ -1,11 +1,8 @@
 package kr.chosun.educhatserver.openai.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
-import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import kr.chosun.educhatserver.openai.dto.ChatGPTRequest;
 import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
