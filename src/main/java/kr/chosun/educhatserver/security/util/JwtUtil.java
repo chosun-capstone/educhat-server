@@ -3,7 +3,7 @@ package kr.chosun.educhatserver.security.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import kr.chosun.educhatserver.security.dto.UserDto;
+import kr.chosun.educhatserver.security.dto.UserRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,13 +30,13 @@ public class JwtUtil {
 	}
 
 	//access token generate
-	public String createAccessToken(UserDto user) {
+	public String createAccessToken(UserRequestDto user) {
 
 		return createToken(user, accessTokenExpTime);
 	}
 
 	//jwt generate
-	public String createToken(UserDto user, long expireTime) {
+	public String createToken(UserRequestDto user, long expireTime) {
 
 		Claims claims = Jwts.claims();
 		claims.put("userId", user.getUserId());

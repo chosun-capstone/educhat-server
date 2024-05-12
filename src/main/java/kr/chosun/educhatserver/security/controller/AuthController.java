@@ -2,6 +2,7 @@ package kr.chosun.educhatserver.security.controller;
 
 import jakarta.validation.Valid;
 import kr.chosun.educhatserver.security.dto.LoginRequestDto;
+import kr.chosun.educhatserver.security.dto.UserRequestDto;
 import kr.chosun.educhatserver.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,21 @@ public class AuthController {
 
 	private final AuthService authService;
 
+	@PostMapping("/register")
+	public ResponseEntity<UserRequestDto> signup(
+			@Valid @RequestBody UserRequestDto userRequestDto
+	) {
+
+
+	}
+
 	@PostMapping("/login")
-	public ResponseEntity<String> getUserProfile(
+	public ResponseEntity<String> getUserIdPassword(
 			@Valid @RequestBody LoginRequestDto requestDto
 	) {
 
 		String token = authService.login(requestDto);
 		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
+
 }

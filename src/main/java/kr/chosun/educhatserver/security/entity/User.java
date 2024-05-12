@@ -3,6 +3,7 @@ package kr.chosun.educhatserver.security.entity;
 import jakarta.persistence.*;
 import kr.chosun.educhatserver.openai.entity.ChatRecord;
 import kr.chosun.educhatserver.security.constant.Role;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "USER")
 public class User {
 
