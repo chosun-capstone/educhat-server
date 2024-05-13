@@ -59,5 +59,4 @@ public class AuthService {
 		return jwtUtil.createAccessToken(userRequestDto);
 	}
 
-
 }

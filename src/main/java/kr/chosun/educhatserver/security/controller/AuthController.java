@@ -3,6 +3,7 @@ package kr.chosun.educhatserver.security.controller;
 import jakarta.validation.Valid;
 import kr.chosun.educhatserver.security.dto.LoginRequestDto;
 import kr.chosun.educhatserver.security.dto.UserRequestDto;
+import kr.chosun.educhatserver.security.entity.User;
 import kr.chosun.educhatserver.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,10 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/register")
-	public ResponseEntity<UserRequestDto> signup(
+	public ResponseEntity<User> signup(
 			@Valid @RequestBody UserRequestDto userRequestDto
 	) {
-
-
+		return ResponseEntity.ok(authService.signup(userRequestDto));
 	}
 
 	@PostMapping("/login")
