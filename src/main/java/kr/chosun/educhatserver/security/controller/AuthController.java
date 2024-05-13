@@ -1,13 +1,14 @@
 package kr.chosun.educhatserver.security.controller;
 
 import jakarta.validation.Valid;
-import kr.chosun.educhatserver.security.dto.LoginRequestDto;
-import kr.chosun.educhatserver.security.dto.UserRequestDto;
+import kr.chosun.educhatserver.security.dto.LoginDto;
+import kr.chosun.educhatserver.security.dto.UserDto;
 import kr.chosun.educhatserver.security.entity.User;
 import kr.chosun.educhatserver.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,20 +21,18 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	@PostMapping("/register")
+	@PostMapping("/signup")
 	public ResponseEntity<User> signup(
-			@Valid @RequestBody UserRequestDto userRequestDto
+			@Valid @RequestBody UserDto userDto
 	) {
-		return ResponseEntity.ok(authService.signup(userRequestDto));
+		return ResponseEntity.ok(authService.signup(userDto));
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> getUserIdPassword(
-			@Valid @RequestBody LoginRequestDto requestDto
+	public ResponseEntity<User> login(
+			@Valid @RequestBody LoginDto loginDto
 	) {
-
-		String token = authService.login(requestDto);
-		return ResponseEntity.status(HttpStatus.OK).body(token);
+		return ResponseEntity.ok(authService.login(loginDto));
 	}
 
 }

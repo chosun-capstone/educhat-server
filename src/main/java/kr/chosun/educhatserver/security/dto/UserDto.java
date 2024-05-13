@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserRequestDto {
+public class UserDto {
 
 	private Long userId;
 
@@ -19,9 +19,9 @@ public class UserRequestDto {
 
 	private Role role;
 
-	public static UserRequestDto toUser(User user) {
+	public static UserDto toUser(User user) {
 
-		return UserRequestDto.builder()
+		return UserDto.builder()
 				.userId(user.getUserId())
 				.email(user.getEmail())
 				.name(user.getName())

@@ -1,7 +1,7 @@
 package kr.chosun.educhatserver.security.service;
 
-import kr.chosun.educhatserver.security.dto.LoginRequestDto;
-import kr.chosun.educhatserver.security.dto.UserRequestDto;
+import kr.chosun.educhatserver.security.dto.LoginDto;
+import kr.chosun.educhatserver.security.dto.UserDto;
 import kr.chosun.educhatserver.security.entity.User;
 import kr.chosun.educhatserver.security.repository.UserRepository;
 import kr.chosun.educhatserver.security.util.JwtUtil;
@@ -22,29 +22,29 @@ public class AuthService {
 	private final PasswordEncoder encoder;
 
 	@Transactional
-	public User signup(UserRequestDto userRequestDto) {
+	public User signup(UserDto userDto) {
 
-		if(userRepository.existsByEmail(userRequestDto.getEmail())) {
+		if(userRepository.existsByEmail(userDto.getEmail())) {
 			throw new RuntimeException("이미 가입되어 있는 유저입니다");
 		}
 
 		User user = User.builder()
-				.userId(userRequestDto.getUserId())
-				.email(userRequestDto.getEmail())
-				.name(userRequestDto.getName())
-				.password(userRequestDto.getPassword())
-				.role(userRequestDto.getRole())
+				.userId(userDto.getUserId())
+				.email(userDto.getEmail())
+				.name(userDto.getName())
+				.password(userDto.getPassword())
+				.role(userDto.getRole())
 				.build();
 
 		return userRepository.save(user);
 	}
 
 	@Transactional
-	public String login(LoginRequestDto requestDto) {
+	public User login(LoginDto loginDto) {
 
-		String email = requestDto.getEmail();
-		String password = requestDto.getPassword();
-		User user = userRepository.findUserByEmail(email);
+		String username = loginDto.getUsername();
+		String password = loginDto.getPassword();
+		User user = userRepository.findUserByEmail(username);
 
 		if(user == null) {
 			throw new UsernameNotFoundException("이메일이 존재하지 않습니다.");
@@ -54,9 +54,9 @@ public class AuthService {
 			throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 		}
 
-		UserRequestDto userRequestDto = UserRequestDto.toUser(user);
+		UserDto userDto = UserDto.toUser(user);
 
-		return jwtUtil.createAccessToken(userRequestDto);
+		return jwtUtil.createAccessToken(userDto);
 	}
 
 }
