@@ -9,17 +9,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService {
+public class AuthService extends DefaultOAuth2UserService {
 
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;
+
+	@Transactional
 
 	@Transactional
 	public User signup(UserDto userDto) {
