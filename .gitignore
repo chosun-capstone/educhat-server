@@ -23,6 +23,7 @@ bin/
 *.iml
 *.ipr
 application-secret.properties
+application-oauth.yml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
