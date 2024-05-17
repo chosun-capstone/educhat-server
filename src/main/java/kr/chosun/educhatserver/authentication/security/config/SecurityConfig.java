@@ -39,7 +39,8 @@ public class SecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable);
 
 		//CORS
-		http.cors(Customizer.withDefaults());
+		http.cors(httpSecurityCorsConfigurer ->
+				httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
 
 		//FormLogin, BasicHttp disable
 		http.formLogin(AbstractHttpConfigurer::disable);
@@ -67,6 +68,7 @@ public class SecurityConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
+
 		configuration.setAllowedOriginPatterns(List.of("*"));
 		configuration.addAllowedHeader("*");
 		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE"));
@@ -74,6 +76,7 @@ public class SecurityConfig {
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
+
 		return source;
 	}
 }
