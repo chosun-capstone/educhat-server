@@ -8,9 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+
 import java.time.LocalDateTime;
-import kr.chosun.educhatserver.security.entity.User;
+import kr.chosun.educhatserver.authentication.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

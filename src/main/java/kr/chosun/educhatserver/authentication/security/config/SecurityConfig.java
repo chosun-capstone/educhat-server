@@ -1,8 +1,5 @@
-package kr.chosun.educhatserver.security.config;
+package kr.chosun.educhatserver.authentication.security.config;
 
-import kr.chosun.educhatserver.security.exception.OAuth2SuccessHandler;
-import kr.chosun.educhatserver.security.exception.TokenAuthenticationFilter;
-import kr.chosun.educhatserver.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,9 +25,6 @@ import java.util.List;
 public class SecurityConfig {
 
 	private static final String[] WHITELIST = {};
-	private final CustomOAuth2UserService oAuth2UserService;
-	private final OAuth2SuccessHandler oAuth2SuccessHandler;
-	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -60,11 +54,6 @@ public class SecurityConfig {
 				.requestMatchers(WHITELIST).permitAll()
 				.anyRequest().authenticated());
 
-		http.oauth2Login(login -> login
-				.userInfoEndpoint(userInfoEndpointConfig ->
-					userInfoEndpointConfig.userService()));
-		  .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()); // 토큰 예외 핸들링
 
 		return http.build();
 	}
