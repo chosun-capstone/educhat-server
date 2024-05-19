@@ -63,7 +63,7 @@ public class JwtUtil {
 		Role memberRole = Role.valueOf(role);
 
 		Member member = Member.builder().email(email).name(name).role(memberRole).build();
-		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(member.getRole().getRole()));
+		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(member.getRole().getValue()));
 		PrincipalDetail principalDetail = new PrincipalDetail(member, authorities);
 
 		return new UsernamePasswordAuthenticationToken(principalDetail, "", authorities);

@@ -4,12 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum Role {
 	USER("USER"), ADMIN("ADMIN");
-
-	private final String role;
-
-	Role(String role) {
-		this.role = role;
-	}
+	private final String value;
 }
