@@ -5,16 +5,16 @@ import kr.chosun.educhatserver.openai.dto.ChatGPTRequest;
 import kr.chosun.educhatserver.openai.dto.ChatGPTResponse;
 import kr.chosun.educhatserver.openai.dto.GPTPromptDTO;
 import kr.chosun.educhatserver.openai.dto.Message;
-import kr.chosun.educhatserver.openai.entity.ChatRecord;
-import kr.chosun.educhatserver.openai.entity.FileContentEntity;
-import kr.chosun.educhatserver.openai.entity.FileEntity;
+import kr.chosun.educhatserver.openai.entity.*;
 import kr.chosun.educhatserver.openai.repository.ChatRecordRepository;
 import kr.chosun.educhatserver.openai.repository.FileContentRepository;
+import kr.chosun.educhatserver.openai.repository.FileProcessedRepository;
 import kr.chosun.educhatserver.openai.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,6 +39,7 @@ public class ChatGPTService {
     private final ChatRecordRepository repository;
     private final FileRepository fileRepository;
     private final FileContentRepository fileContentRepository;
+    private final FileProcessedRepository fileProcessedRepository;
     private final ObjectMapper objectMapper;
 
     public ChatGPTResponse getChatGPTResponse(ChatGPTRequest request) {
@@ -62,6 +63,7 @@ public class ChatGPTService {
         repository.save(chatRecord);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
     public void beginGPT(long fileId){
         FileEntity fileEntity = fileRepository.getReferenceById(fileId);
@@ -77,7 +79,7 @@ public class ChatGPTService {
         });
         List<Message> prompts = new ArrayList<>();
         prompts.add(new Message(
-                "system", "너는 내가 보내는 내용을 페이지별로 요약해서 한국어로 보내줘. 내용 안에 이상한 특수문자같은거 빼주고, 나열하지말고 쭉 서술형으로 설명해줘. 최대한 구체적으로 설명해줘야해. 사용자에게 보여줄거라 개행이나 숫자같은거 넣어서 설명해도돼. 형식은 다음과 같은 JSON으로 보내줘. [{\"page\": 페이지번호,\"content\":\"너가요약한내용\"}...]"
+                "system", "너는 내가 보내는 내용을 페이지별로 요약해서 한국어로 보내줘. 필요없는 특수문자 빼버리고 깔끔하게 요약해줘. 아무 내용도 없더라도 적어도 간단한 설명 넣어서 모든 페이지 있게 보내줘. 나열하지말고 쭉 서술형으로 설명해줘. 최대한 구체적으로 설명해줘야해. 사용자에게 보여줄거라 개행이나 숫자같은거 넣어서 설명해도돼. 형식은 다음과 같은 JSON으로 보내줘. 길이수 제한 안걸리게 생성해줘. [{\"page\": 페이지번호,\"content\":\"너가요약한내용\"}...]"
         ));
         StringBuilder sb = new StringBuilder();
         AtomicInteger pageIndex = new AtomicInteger(0);
@@ -99,13 +101,19 @@ public class ChatGPTService {
         ChatGPTResponse.Choice result = response.getChoices().get(0);
         try {
             GPTPromptDTO[] dtos = objectMapper.readValue(result.getMessage().getContent(), GPTPromptDTO[].class);
+
+            List<FileProcessedEntity> entities = new ArrayList<>();
             for (GPTPromptDTO dto : dtos) {
                 System.out.println("PAGE : " + dto.getPage() +", Content:" + dto.getContent());
+                entities.add(new FileProcessedEntity(fileId, (long) dto.getPage(), dto.getContent()));
             }
+            fileEntity.setStatus(FileStatus.PROCESSED);
+            fileRepository.save(fileEntity);
+            fileProcessedRepository.saveAllAndFlush(entities);
         }catch(Exception ex) {
-
+            ex.printStackTrace();
+            fileEntity.setStatus(FileStatus.FAILED);
+            fileRepository.save(fileEntity);
         }
-
-        System.out.println(response);
     }
 }
