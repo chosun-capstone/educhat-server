@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private static final String[] WHITELIST = {};
+	private static final String[] WHITELIST = {"/file"};
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {

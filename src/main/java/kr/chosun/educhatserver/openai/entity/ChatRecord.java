@@ -1,16 +1,10 @@
 package kr.chosun.educhatserver.openai.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import kr.chosun.educhatserver.authentication.entity.User;
+
+import kr.chosun.educhatserver.authentication.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +22,9 @@ public class ChatRecord {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "categories")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member user;
 
     @Column(name = "userMessage")
     private String userMessage;
