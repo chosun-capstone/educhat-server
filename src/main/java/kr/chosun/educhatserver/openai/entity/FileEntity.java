@@ -20,6 +20,7 @@ public class FileEntity {
     @Column(name = "status")
     private FileStatus status;
 
-    @Column(name = "file_data", length = 1000000)
-    private byte[] data;
+    @OneToOne(mappedBy = "file", cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private FileDataEntity fileData;
 }

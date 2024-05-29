@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private static final String[] WHITELIST = {"/file"};
+	private static final String[] WHITELIST = {"/files/**"};
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -71,8 +71,9 @@ public class SecurityConfig {
 
 		configuration.setAllowedOriginPatterns(List.of("*"));
 		configuration.addAllowedHeader("*");
-		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE"));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "HEAD"));
 		configuration.setAllowCredentials(true);
+		configuration.addAllowedOrigin("http://localhost:8080");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);

@@ -42,7 +42,7 @@ public class FileAsyncService {
                 throw new RuntimeException(); //앞에서 걸렀는데 일어날리가..
         };
 
-        List<ParsedPage> pages = parser.parse(new ByteArrayInputStream(fileEntity.getData()));
+        List<ParsedPage> pages = parser.parse(new ByteArrayInputStream(fileEntity.getFileData().getData()));
         List<FileContentEntity> fce = new ArrayList<>();
         for (int i = 0; i < pages.size(); i++) {
             ParsedPage page = pages.get(i);
