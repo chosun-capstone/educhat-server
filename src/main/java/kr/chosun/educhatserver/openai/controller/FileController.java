@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.chosun.educhatserver.openai.dto.FileDTO;
 import kr.chosun.educhatserver.openai.entity.FileDataEntity;
 import kr.chosun.educhatserver.openai.entity.FileEntity;
+import kr.chosun.educhatserver.openai.entity.FileProcessedEntity;
 import kr.chosun.educhatserver.openai.entity.FileStatus;
+import kr.chosun.educhatserver.openai.repository.FileProcessedRepository;
 import kr.chosun.educhatserver.openai.repository.FileRepository;
 import kr.chosun.educhatserver.openai.service.FileAsyncService;
 import kr.chosun.educhatserver.parser.*;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileController {
     private final FileRepository fileRepository;
+    private final FileProcessedRepository fileProcessedRepository;
     private final FileAsyncService fileAsyncService;
 
     @PostMapping("/files")
@@ -61,6 +64,11 @@ public class FileController {
                 .contentType(mediaType)
                 .contentLength(arr.length)
                 .body(new InputStreamResource(new ByteArrayInputStream(arr)));
+    }
+
+    @GetMapping("/summary/{fileId}")
+    public List<FileProcessedEntity> getSummary(@PathVariable Long fileId) {
+        return fileProcessedRepository.findAllByFileId(fileId);
     }
 
     public boolean isSupportedExtension(String extension) {

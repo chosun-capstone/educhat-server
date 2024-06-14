@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
-	private static final String[] WHITELIST = {"/files/**"};
+	private static final String[] WHITELIST = {"/**"};
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
