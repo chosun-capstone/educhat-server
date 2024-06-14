@@ -15,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableGlobalAuthentication
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
 	private static final String[] WHITELIST = {"/files/**"};
 
@@ -81,5 +83,15 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 
 		return source;
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("https://educhat.yeongmin.kr", "http://educhat.yeongmin.kr")
+				.allowedMethods("GET", "POST", "PUT", "DELETE")
+				.allowedHeaders("Authorization", "Content-Type")
+				.allowCredentials(true)
+				.maxAge(3600);
 	}
 }
