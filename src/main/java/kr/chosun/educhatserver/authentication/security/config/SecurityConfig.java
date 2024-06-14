@@ -74,6 +74,7 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "HEAD"));
 		configuration.setAllowCredentials(true);
 		configuration.addAllowedOrigin("http://localhost:8080");
+		configuration.addAllowedOrigin("https://educhat.yeongmin.kr");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
