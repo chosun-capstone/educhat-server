@@ -57,5 +57,6 @@ public class FileAsyncService {
         fileRepository.save(fileEntity);
         fileContentRepository.saveAllAndFlush(fce);
         gptService.beginGPT(fileEntity.getId());
+        gptService.beginGPTQues(fileEntity.getId());
     }
 }

@@ -3,11 +3,9 @@ package kr.chosun.educhatserver.openai.controller;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.chosun.educhatserver.openai.dto.FileDTO;
-import kr.chosun.educhatserver.openai.entity.FileDataEntity;
-import kr.chosun.educhatserver.openai.entity.FileEntity;
-import kr.chosun.educhatserver.openai.entity.FileProcessedEntity;
-import kr.chosun.educhatserver.openai.entity.FileStatus;
+import kr.chosun.educhatserver.openai.entity.*;
 import kr.chosun.educhatserver.openai.repository.FileProcessedRepository;
+import kr.chosun.educhatserver.openai.repository.FileQuestionRepository;
 import kr.chosun.educhatserver.openai.repository.FileRepository;
 import kr.chosun.educhatserver.openai.service.FileAsyncService;
 import kr.chosun.educhatserver.parser.*;
@@ -33,6 +31,7 @@ public class FileController {
     private final FileRepository fileRepository;
     private final FileProcessedRepository fileProcessedRepository;
     private final FileAsyncService fileAsyncService;
+    private final FileQuestionRepository fileQuestionRepository;
 
     @PostMapping("/files")
     public void uploadFile(@RequestParam(name = "file") MultipartFile file) {
@@ -53,7 +52,7 @@ public class FileController {
 
     @GetMapping("/files")
     public List<FileDTO> getFiles() {
-        return fileRepository.findAll().stream().map((e) -> new FileDTO(e.getId(), e.getFileName())).toList();
+        return fileRepository.findAll().stream().map((e) -> new FileDTO(e.getId(), e.getFileName(), e.getStatus())).toList();
     }
 
     @GetMapping("/files/{fileId}")
@@ -71,6 +70,11 @@ public class FileController {
     @GetMapping("/summary/{fileId}")
     public List<FileProcessedEntity> getSummary(@PathVariable Long fileId) {
         return fileProcessedRepository.findAllByFileId(fileId);
+    }
+
+    @GetMapping("/question/{fileId}")
+    public List<FileQuestionEntity> getQuestion(@PathVariable Long fileId) {
+        return fileQuestionRepository.findAllByFileId(fileId);
     }
 
     public boolean isSupportedExtension(String extension) {
