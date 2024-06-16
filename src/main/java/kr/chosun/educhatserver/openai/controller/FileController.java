@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController//("/file")
@@ -60,7 +62,7 @@ public class FileController {
         byte[] arr = fileEntity.getFileData().getData();
         MediaType mediaType = getMediaTypeForFileName(req.getServletContext(), fileEntity.getFileName());
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileEntity.getFileName()) // file.getName()은 원본 파일명
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + URLEncoder.encode(fileEntity.getFileName(), StandardCharsets.UTF_8)) // file.getName()은 원본 파일명
                 .contentType(mediaType)
                 .contentLength(arr.length)
                 .body(new InputStreamResource(new ByteArrayInputStream(arr)));
